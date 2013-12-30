@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+
+    <DatePicker
+            android:id="@+id/targetDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"></DatePicker>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/daysLeft"
+            android:textSize="40dp"
+            android:gravity="center"
+            />
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/hoursLeft"
+            android:textSize="40dp"
+            android:gravity="center"
+            />
+</LinearLayout>
+
