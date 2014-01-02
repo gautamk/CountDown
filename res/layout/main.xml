@@ -5,19 +5,55 @@
               android:layout_height="fill_parent"
         >
 
-    <DatePicker
-            android:id="@+id/targetDate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"></DatePicker>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:id="@+id/targetDate"
+                ></DatePicker>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:orientation="vertical">
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/hoursPerDay"
+                    android:text="24"/>
+
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/clear"
+                    android:text="clear"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
     <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:id="@+id/daysLeft"
+            android:layout_height="wrap_content"
+            android:id="@+id/daysLeft"
             android:textSize="40dp"
             android:gravity="center"
             />
+
     <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:id="@+id/hoursLeft"
+            android:layout_height="wrap_content"
+            android:id="@+id/hoursLeft"
             android:textSize="40dp"
             android:gravity="center"
             />
