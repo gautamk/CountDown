@@ -3,7 +3,6 @@ package com.gautamk.CountDown;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +16,6 @@ import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TreeMap;
 
 public class MainActivity extends Activity implements DatePicker.OnDateChangedListener {
 
@@ -31,8 +24,9 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
      * Called when the activity is first created.
      */
     TextView daysLeft, hoursLeft;
-    EditText hoursPerDay, dateText;
+    EditText hoursPerDay;
     DatePicker targetDate;
+    LocalDateTime then = new LocalDateTime();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +43,25 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
             @Override
             public void onClick(View view) {
                 initDatePicker(new LocalDateTime());
+                hoursPerDay.setText("24");
             }
         });
         initDatePicker();
+        hoursPerDay.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                setDaysLeft(then.getYear(),then.getMonthOfYear(),then.getDayOfMonth());
+                setHoursLeft(then.getYear(),then.getMonthOfYear(),then.getDayOfMonth());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
     }
 
 
@@ -65,21 +75,39 @@ public class MainActivity extends Activity implements DatePicker.OnDateChangedLi
     }
 
     private void setDaysLeft(int year, int month, int day) {
-        LocalDate now = new LocalDate();
-        LocalDate then = new LocalDate(year, month, day);
+        LocalDateTime now = new LocalDateTime();
+        LocalDateTime then = new LocalDateTime(year, month, day, now.getHourOfDay(), now.getMinuteOfHour());
         int days = Days.daysBetween(now, then).getDays();
         daysLeft.setText(days < 0 ? (days * -1) + " Day Since" : days + " Days Left");
+        this.then = then;
+    }
+
+    private double getHoursPerDay(){
+        try {
+            double hoursPerDay = Double.parseDouble(this.hoursPerDay.getText().toString());
+            if(!(hoursPerDay > 0.0 && hoursPerDay <= 24.0)) throw new Exception();
+            return hoursPerDay;
+        } catch (Exception e){
+            this.hoursPerDay.setText("24");
+            return 24.0;
+        }
     }
 
     private void setHoursLeft(int year, int month, int day) {
         LocalDateTime now = new LocalDateTime();
         LocalDateTime then = new LocalDateTime(year, month, day, now.getHourOfDay(), now.getMinuteOfHour());
-        double hoursPerDay = Double.parseDouble(this.hoursPerDay.getText().toString());
-        int days = Days.daysBetween(now, then).getDays(),
-                hours = hoursPerDay < 24.0 && hoursPerDay > 0.0 ?
+        double hoursPerDay = getHoursPerDay();
+
+        int days = Days.daysBetween(now, then).getDays();
+        if(days == 0 && new LocalDate().plusDays(1).equals(new LocalDate(then.getYear(),then.getMonthOfYear(),then.getDayOfMonth()))){
+            days = 1;
+        }
+        int hours = hoursPerDay < 24.0 && hoursPerDay > 0.0 ?
                         (int) (days * hoursPerDay) :
                         Hours.hoursBetween(now, then).getHours();
+
         hoursLeft.setText(hours < 0 ? (hours * -1) + " Hours Since" : hours + " Hours Left");
+        this.then = then;
     }
 
 
